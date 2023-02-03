@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt');
 const {todoRouter} = require("./routes/todo.route")
 const {connection} = require("./config/db")
-const {UserModel} = require("./models/User.model")
+const {UserModel} = require("./models/User.model") 
 
 const { authenticate } = require("./middlewares/authentication"); 
 const app = express();
@@ -38,7 +38,7 @@ app.post("/login", async (req, res) => {
     const {email, password} = req.body;
     try{
         const user = await UserModel.find({email})
-         
+          
       if(user.length > 0){
         const hashed_password = user[0].password;
         bcrypt.compare(password, hashed_password, function(err, result) {

@@ -54,7 +54,7 @@ todoRouter.patch("/:noteID", async (req, res) => {
             res.send("Not authorised")
         }
         else{
-            await todoModel.findByIdAndUpdate({_id : noteID},payload)
+            await todoModel.findByIdAndUpdate({_id : noteID},req.body)
             res.send({"msg" : "Note updated successfully"})
         }
 })
