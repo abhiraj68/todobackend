@@ -22,5 +22,5 @@ const todoSchema = new mongoose.Schema({
 const todoModel = mongoose.model("note", todoSchema)
 
 module.exports = {
-    NoteModel
+  todoModel
 }
