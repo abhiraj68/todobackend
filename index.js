@@ -39,11 +39,11 @@ app.post("/login", async (req, res) => {
     try{
         const user = await UserModel.find({email})
          
-      if(user){
-        const hashed_password = user.password;
+      if(user.length > 0){
+        const hashed_password = user[0].password;
         bcrypt.compare(password, hashed_password, function(err, result) {
-            if(result==true){
-                const token = jwt.sign({"userID":user._id}, 'hush');
+            if(result){
+                const token = jwt.sign({"userID":user[0]._id}, 'hush');
                 res.send({"msg":"Login successfull","token" : token})
             }
             else{

@@ -5,19 +5,38 @@ const express = require("express")
 const {todoModel} = require("../models/todo.model")
 
 const todoRouter = express.Router();
-
+// taskName: {
+//     type: String,
+//     required: true
+//   },
+//   status: {
+//     type: String,
+//     required: true
+//   },
+//   tag: {
+//     type: String,
+//     required: true
+//   },
+//   user: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User"
+//   }
+// });
 
 todoRouter.get("/", async (req, res) => {
-    const notes = await NoteModel.find()
+    const userID = req.body.userID
+    console.log(userID)
+    const notes = await todoModel.find({userID})
     res.send(notes)
 })
 
-todoRouter.post("/create", async (req, res) => {
+todoRouter.post("/", async (req, res) => {
+   
     const payload = req.body
     //get token from header
     //verify token using jwt
     try{
-        const new_note = new NoteModel(payload)
+        const new_note = new todoModel(payload)
         await new_note.save()
         res.send({"msg" : "Note created successfully"})
     }
@@ -27,23 +46,31 @@ todoRouter.post("/create", async (req, res) => {
     }
 })
 
-todoRouter.patch("/update/:noteID", async (req, res) => {
+todoRouter.patch("/:noteID", async (req, res) => {
         const noteID = req.params.noteID
         const userID = req.body.userID
-        const note = await NoteModel.findOne({_id:noteID})
+        const note = await todoModel.findOne({_id:noteID})
         if(userID !== note.userID){
             res.send("Not authorised")
         }
         else{
-            await NoteModel.findByIdAndUpdate({_id : noteID},payload)
+            await todoModel.findByIdAndUpdate({_id : noteID},payload)
             res.send({"msg" : "Note updated successfully"})
         }
 })
 
-todoRouter.delete("/delete/:noteID", async (req, res) => {
+todoRouter.delete("/:noteID", async (req, res) => {
     const noteID = req.params.noteID
-    await NoteModel.findByIdAndDelete({_id : noteID})
-    res.send({"msg" : "Note deleted successfully"})
+    const userID = req.body.userID
+    const note = await todoModel.findOne({_id:noteID})
+    if(userID !== note.userID){
+        res.send("Not authorised")
+    }
+    else{
+        await todoModel.findByIdAndDelete({_id : noteID})
+        res.send({"msg" : "Note deleted successfully"})
+    }
+   
 })
 
 
