@@ -5,7 +5,7 @@ const {todoRouter} = require("./routes/todo.route")
 const {connection} = require("./config/db")
 const {UserModel} = require("./models/User.model")
 
-const { authenticate } = require("./middlewares/authentication");
+const { authenticate } = require("./middlewares/authentication"); 
 const app = express();
 
 app.use(express.json())
